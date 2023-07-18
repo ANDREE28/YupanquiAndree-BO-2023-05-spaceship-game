@@ -19,11 +19,29 @@ class Spaceship(Sprite):
         screen.blit(self.image,self.rect)
 
     def update(self, user_input):
-        if user_input[pygame.K_LEFT] and self.rect.x>0:
-            self.rect.x -= 10
-        elif user_input[pygame.K_RIGHT] and self.rect.right < SCREEN_WIDTH:
-            self.rect.x += 10
+        if user_input[pygame.K_LEFT] :
+            self.left()
+        elif user_input[pygame.K_RIGHT] :
+            self.right()
+            
         elif user_input[pygame.K_UP] and self.rect.top > 300:
             self.rect.y -=10
         elif user_input[pygame.K_DOWN] and self.rect.bottom < SCREEN_HEIGHT :
             self.rect.y +=10
+
+
+
+    def left(self):
+        self.rect.x -=10
+        if self.rect.x<0:
+            self.rect.x = SCREEN_WIDTH
+
+    def right(self):
+        self.rect.x +=10
+        if self.rect.right > SCREEN_WIDTH:
+            self.rect.x = 0
+
+
+
+
+
