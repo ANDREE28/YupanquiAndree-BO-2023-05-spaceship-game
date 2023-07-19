@@ -17,7 +17,6 @@ class Game:
         self.y_pos_bg = 0
         self.player = Spaceship()
         self.enemies = EnemyManager()
-
     def run(self):
         # Game loop: events - update - draw
         self.playing = True
