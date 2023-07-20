@@ -1,6 +1,6 @@
 import pygame
 import os
-
+pygame.mixer.init()
 # Global Constants
 TITLE = "Spaceships Game"
 SCREEN_HEIGHT = 600
@@ -27,5 +27,10 @@ BULLET = pygame.image.load(os.path.join(IMG_DIR, "Bullet/bullet_1.png"))
 BULLET_ENEMY = pygame.image.load(os.path.join(IMG_DIR, "Bullet/bullet_2.png"))
 ENEMY_1 = pygame.image.load(os.path.join(IMG_DIR, "Enemy/enemy_1.png"))
 ENEMY_2 =  pygame.image.load(os.path.join(IMG_DIR,"Enemy/enemy_2.png"))
+
+SOUND = {
+   "Shoothing" : pygame.mixer.Sound(os.path.join(IMG_DIR, "Sound/shooting.wav")),
+   "Burst": pygame.mixer.Sound(os.path.join(IMG_DIR, "Sound/burst.wav"))
+}
 
 FONT_STYLE = 'freesansbold.ttf'
