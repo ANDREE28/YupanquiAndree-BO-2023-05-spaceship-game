@@ -3,6 +3,7 @@ import random
 from pygame.sprite import Sprite
 
 from game.utils.constants import ENEMY_1,ENEMY_2, SCREEN_HEIGHT, SCREEN_WIDTH
+from game.components.bullets.bullet import Bullet
 
 class Enemy(Sprite):
     ENEMY_WIDTH = 40
@@ -13,6 +14,9 @@ class Enemy(Sprite):
     SPEED_ON_X = 10
     MOVES = { 0: 'left', 1: 'right' }
     IMAGE = {1:ENEMY_1, 2:ENEMY_2}
+    INITIAL_SHOOTING_TIME = 1000
+    FINAL_SHOOTING_TIME = 3000
+
 
     def __init__(self,image = 1,speed_x = SPEED_ON_X , speed_y = SPEED_ON_Y , moves_before_change = [20,50]):
         self.image = self.IMAGE[image]
@@ -20,17 +24,21 @@ class Enemy(Sprite):
         self.rect = self.image.get_rect(midtop = (random.choice(self.X_POS_RANGE), self.Y_POS))
         self.direction = self.MOVES[random.randint(0, 1)]
         self.movement_count = 0
-        self.SPEED_ON_X =speed_x
-        self.SPEED_ON_Y = speed_y
+        self.speed_on_x =speed_x
+        self.speed_on_y = speed_y
         self.moves_before_change = random.randint(moves_before_change[0],moves_before_change[1])
+        self.type = 'enemy'
+        current_time = pygame.time.get_ticks()
+        self.shooting_time = random.randint(current_time + self.INITIAL_SHOOTING_TIME, current_time + self.INITIAL_SHOOTING_TIME)
 
-    def update(self, enemies):
-        self.rect.y += self.SPEED_ON_Y
+    def update(self, enemies,game):
+        self.rect.y += self.speed_on_y
+        self.shoot(game.bullet_manager)
 
         if self.direction == self.MOVES[0]:
-            self.rect.x -= self.SPEED_ON_X
+            self.rect.x -= self.speed_on_x
         elif self.direction == self.MOVES[1]:
-            self.rect.x += self.SPEED_ON_X
+            self.rect.x += self.speed_on_x
 
         self.handle_direction()
 
@@ -50,3 +58,11 @@ class Enemy(Sprite):
         
         if (self.movement_count >= self.moves_before_change):
             self.movement_count = 0
+
+    def shoot(self, bullet_manager):
+            current_time = pygame.time.get_ticks()
+
+            if self.shooting_time <= current_time:
+                bullet = Bullet(self)
+                bullet_manager.add_bullet(bullet)
+                self.shooting_time += random.randint(self.INITIAL_SHOOTING_TIME, self.FINAL_SHOOTING_TIME)
