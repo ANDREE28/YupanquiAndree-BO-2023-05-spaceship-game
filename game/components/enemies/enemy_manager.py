@@ -27,4 +27,7 @@ class EnemyManager:
         
         if len(self.enemies)<2:
             self.enemies.append(enemy)
+        
+    def reset(self):
+        self.enemies = []
 
