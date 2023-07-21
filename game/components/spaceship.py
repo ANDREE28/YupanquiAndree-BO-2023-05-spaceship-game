@@ -55,6 +55,10 @@ class Spaceship(Sprite):
         SOUND["Shoothing"].set_volume(0.02)
         SOUND["Shoothing"].play()
 
+    def reset(self):
+        self.rect.x = self.SPACESHIP_POS_X
+        self.rect.y = self.SPACESHIP_POS_Y
+
 
 
 

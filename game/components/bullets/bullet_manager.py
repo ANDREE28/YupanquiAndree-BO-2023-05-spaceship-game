@@ -15,7 +15,7 @@ class BulletManager:
                 if bullet.rect.colliderect(enemy.rect) and bullet.owner =='player':
                     game.enemy_manager.enemies.remove(enemy)
                     self.player_bullets.remove(bullet)
-                    game.increase_score()
+                    game.score.update()
                     SOUND["Burst"].set_volume(0.02)
                     SOUND["Burst"].play()
 
@@ -24,7 +24,7 @@ class BulletManager:
 
             if bullet.rect.colliderect(game.player.rect) and bullet.owner == 'enemy':
                 self.enemy_bullets.remove(bullet)
-                game.increase_death_counter()
+                game.death_count.update()
                 game.playing = False
                 pygame.time.delay(500)
                 break

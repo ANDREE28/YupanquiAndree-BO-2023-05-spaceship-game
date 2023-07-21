@@ -6,11 +6,9 @@ class Menu:
     SCREEN_HALF_HEIGHT = SCREEN_HEIGHT / 2
     SCREEN_HALF_WIDTH = SCREEN_WIDTH / 2
 
-    def __init__(self, screen, message):
-        self.reset_screen(screen)
+    def __init__(self, screen):
+        screen.fill((255,255,255))
         self.font = pygame.font.Font(FONT_STYLE, 30)
-        self.text = self.font.render(message, False, "Black")
-        self.rect = self.text.get_rect(center = (self.SCREEN_HALF_WIDTH, self.SCREEN_HALF_HEIGHT))
     
     def update(self, game):
         pygame.display.update()
@@ -30,6 +28,8 @@ class Menu:
     def reset_screen(self, screen):
         screen.fill('White')
     
-    def update_message(self, message):
-        self.text = self.font.render(message, False, 'Black')
-        self.rect = self.text.get_rect(center = (self.SCREEN_HALF_WIDTH, self.SCREEN_HALF_HEIGHT))
+    def draw(self,screen, message,x=SCREEN_HALF_WIDTH,y=SCREEN_HALF_HEIGHT,color = (0,0,0)):
+        text = self.font.render(message,True,color)
+        text_rect = text.get_rect()
+        text_rect.center = (x,y)
+        screen.blit(text, text_rect)
