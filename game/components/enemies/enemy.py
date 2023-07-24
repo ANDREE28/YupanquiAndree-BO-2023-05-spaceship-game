@@ -2,7 +2,7 @@ import pygame
 import random
 from pygame.sprite import Sprite
 
-from game.utils.constants import ENEMY_1,ENEMY_2, SCREEN_HEIGHT, SCREEN_WIDTH
+from game.utils.constants import ENEMY_1,ENEMY_2,ENEMY_3, SCREEN_HEIGHT, SCREEN_WIDTH
 from game.components.bullets.bullet import Bullet
 
 class Enemy(Sprite):
@@ -13,7 +13,7 @@ class Enemy(Sprite):
     SPEED_ON_Y = 1
     SPEED_ON_X = 10
     MOVES = { 0: 'left', 1: 'right' }
-    IMAGE = {1:ENEMY_1, 2:ENEMY_2}
+    IMAGE = {1:ENEMY_1, 2:ENEMY_2,3:ENEMY_3}
     INITIAL_SHOOTING_TIME = 1000
     FINAL_SHOOTING_TIME = 3000
 

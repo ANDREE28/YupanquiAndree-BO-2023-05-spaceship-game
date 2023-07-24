@@ -1,11 +1,13 @@
 import pygame
 
-from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, FONT_STYLE
+from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE,FONT_SIZE
 from game.components.spaceship import Spaceship
 from game.components.enemies.enemy_manager import EnemyManager
 from game.components.bullets.bullet_manager import BulletManager
 from game.components.menu import Menu
 from game.components.counter import Counter
+from game.components.power_ups.power_up_manager import PowerUpManager
+from game.components.sound_manager import SoundManager
 class Game:
     def __init__(self):
         pygame.init()
@@ -27,22 +29,29 @@ class Game:
         self.score = Counter()
         self.death_count = Counter()
         self.highest_score = Counter() 
+        self.power_up_manager = PowerUpManager()
+        self.sound_manager = SoundManager()
+        
+
 
     def execute(self):
         self.running = True
         while self.running and not self.playing:
             self.show_menu()
+            
         pygame.display.quit()
         pygame.quit()
 
     def run(self):
         self.reset()
         # Game loop: events - update - draw
+        
         self.playing = True
         while self.playing:
             self.events()
             self.update()
             self.draw()
+            
 
     def events(self):
         for event in pygame.event.get():
@@ -54,6 +63,8 @@ class Game:
         self.player.update(user_input, self)
         self.enemy_manager.update(self)
         self.bullet_manager.update(self)
+        self.power_up_manager.update(self)
+        self.sound_manager.update(user_input)
 
     def draw(self):
         self.clock.tick(FPS)
@@ -62,9 +73,19 @@ class Game:
         self.player.draw(self.screen)
         self.enemy_manager.draw(self.screen)
         self.bullet_manager.draw(self.screen)
+        self.power_up_manager.draw(self.screen)
+        self.draw_power_up_time()
         self.score.draw(self.screen)
+        self.control_music_draw()
+        
+
+       
+
         pygame.display.update()
         # pygame.display.flip()
+
+    
+
 
     def draw_background(self):
         image = pygame.transform.scale(BG, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -75,6 +96,8 @@ class Game:
             self.screen.blit(image, (self.x_pos_bg, self.y_pos_bg - image_height))
             self.y_pos_bg = 0
         self.y_pos_bg += self.game_speed
+
+    
 
     def show_menu(self):
         half_screen_width = SCREEN_WIDTH//2
@@ -95,6 +118,8 @@ class Game:
         icon = pygame.transform.scale((ICON), (80, 120))
         self.screen.blit(icon, ((SCREEN_WIDTH / 2) - 40, (SCREEN_HEIGHT / 2) - 150))
         self.menu.update(self)
+        
+        
 
     def update_highest_score(self):
         if self.score.count > self.highest_score.count:
@@ -105,3 +130,21 @@ class Game:
         self.enemy_manager.reset()
         self.score.reset()
         self.player.reset()
+
+    def draw_power_up_time(self):
+        if self.player.has_power_up:
+            time_to_show = round((self.player.power_up_time_up - pygame.time.get_ticks())/1000,2)
+
+            if time_to_show >=0:
+               self.menu.draw(self.screen,f'{self.player.power_up_type.capitalize()} is enabled for   {time_to_show}    seconds ',540,50,(255,255,255))
+            else:
+                self.player.has_power_up = False
+                self.player.power_up_type = DEFAULT_TYPE
+                self.player.set_image()
+
+    def control_music_draw(self):
+        volume_image = self.sound_manager.volume_image
+        self.screen.blit(volume_image, (995,490))
+
+
+   
